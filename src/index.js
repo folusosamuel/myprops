@@ -61,28 +61,54 @@ function Header() {
   return <h1>Fast React Pizza Co.</h1>;
 }
 function Menu() {
+  const pizzas = pizzaData;
+  //const pizzas = [];
+  const numPizzas = pizzas.length;
   return (
-    <div>
+    <main className="menu">
       <h2>Our Menu</h2>
-      <Pizza />
-      <Pizza />
-      <Pizza />
-      <Pizza />
-    </div>
-  );
-}
-function Footer() {
-  return (
-    <footer>{new Date().toLocaleTimeString()}. We are currently open</footer>
+
+      {numPizzas > 0 ? (
+        <ul>
+          {pizzaData.map((pizza) => (
+            <Pizza pizzaObj={pizza} key={pizza.name} />
+          ))}
+        </ul>
+      ) : (
+        <p>We're still working on our menu. Please come back later</p>
+      )}
+    </main>
   );
 }
 
-function Pizza() {
+function Footer() {
+  const hour = new Date().getHours();
+  const openHour = 12;
+  const closeHour = 22;
+  const isOpen = hour >= openHour && hour <= closeHour;
+  console.log(isOpen);
+  return (
+    <footer className="footer">
+      {isOpen ? (
+        <div className="order">
+          <p>We're open until {closeHour}:00. Come visit us or order online.</p>
+        </div>
+      ) : (
+        <p>
+          We're happy to welcome you between {openHour}:00 and {closeHour}:00.
+        </p>
+      )}
+      {new Date().toLocaleTimeString()}.
+    </footer>
+  );
+}
+
+function Pizza(props) {
   return (
     <div>
-      <img src="pizzas/spinaci.jpg" alt="" />
-      <h2>Pizza Spinaci</h2>
-      <p>Tomato, mozarella, mushrooms, and onion</p>
+      <img src={props.pizzaObj.photoName} alt={props.pizzaObj.photoName} />
+      <h2>{props.pizzaObj.name}</h2>
+      <p>{props.pizzaObj.ingredients}</p>
     </div>
   );
 }
